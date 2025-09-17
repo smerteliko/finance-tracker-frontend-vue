@@ -1,0 +1,15 @@
+version: '3.8'
+services:
+  finance-frontend:
+    build: .
+    ports:
+      - "81:80"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    networks:
+      - finance-network
+
+networks:
+  finance-network:
+    driver: bridge
