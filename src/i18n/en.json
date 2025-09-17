@@ -12,10 +12,21 @@
     "passwordLabel": "Password"
   },
   "dashboardPage": {
-    "welcomeMessage": "Welcome, {name}!"
+    "welcomeMessage": "Welcome, {name}!",
+    "transactionsTitle": "Recent Transactions"
   },
   "errors": {
     "connectionFailed": "Connection to the server failed. Please try again later.",
-    "invalidCredentials": "Invalid email or password."
+    "invalidCredentials": "Invalid email or password.",
+    "noAuthToken": "Authentication token not found.",
+    "apiError": "API request failed with status {status}.",
+    "fetchFailed": "Failed to retrieve data from the server."
+  },
+  "transactionsTable": {
+    "date": "Date",
+    "description": "Description",
+    "category": "Category",
+    "amount": "Amount",
+    "noTransactions": "No transactions found for the selected period."
   }
 }
