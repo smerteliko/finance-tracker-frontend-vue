@@ -9,15 +9,17 @@
       {{ transactionsStore.error }}
     </div>
     <div v-else class="text-center mt-3">
-      <h1 class="display-4 text-primary">${{ transactionsStore.analytics?.balance.toFixed(2) ?? '0.00' }}</h1>
+      <h1 class="display-4 text-primary">
+        ${{ transactionsStore.analytics?.balance.toFixed(2) ?? '0.00' }}
+      </h1>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { useI18n } from 'vue-i18n';
-import { useTransactionsStore } from '@/stores/transactions';
+import { useI18n } from 'vue-i18n'
+import { useTransactionsStore } from '@/stores/transactions'
 
-const { t } = useI18n();
-const transactionsStore = useTransactionsStore();
+const { t } = useI18n()
+const transactionsStore = useTransactionsStore()
 </script>

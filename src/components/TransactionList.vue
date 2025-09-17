@@ -11,26 +11,32 @@
     <div v-else class="table-responsive">
       <table class="table table-striped table-hover">
         <thead>
-        <tr>
-          <th>{{ t('transactionsTable.date') }}</th>
-          <th>{{ t('transactionsTable.description') }}</th>
-          <th>{{ t('transactionsTable.category') }}</th>
-          <th class="text-end">{{ t('transactionsTable.amount') }}</th>
-        </tr>
+          <tr>
+            <th>{{ t('transactionsTable.date') }}</th>
+            <th>{{ t('transactionsTable.description') }}</th>
+            <th>{{ t('transactionsTable.category') }}</th>
+            <th class="text-end">{{ t('transactionsTable.amount') }}</th>
+          </tr>
         </thead>
         <tbody>
-        <tr v-for="transaction in transactionsStore.transactions" :key="transaction.id">
-          <td>{{ new Date(transaction.date).toLocaleDateString() }}</td>
-          <td>{{ transaction.description }}</td>
-          <td>
+          <tr v-for="transaction in transactionsStore.transactions" :key="transaction.id">
+            <td>{{ new Date(transaction.date).toLocaleDateString() }}</td>
+            <td>{{ transaction.description }}</td>
+            <td>
               <span class="badge" :style="{ backgroundColor: transaction.categoryColor }">
                 {{ transaction.categoryName }}
               </span>
-          </td>
-          <td class="text-end" :class="{ 'text-success': transaction.type === 'INCOME', 'text-danger': transaction.type === 'EXPENSE' }">
-            ${{ transaction.amount.toFixed(2) }}
-          </td>
-        </tr>
+            </td>
+            <td
+              class="text-end"
+              :class="{
+                'text-success': transaction.type === 'INCOME',
+                'text-danger': transaction.type === 'EXPENSE',
+              }"
+            >
+              ${{ transaction.amount.toFixed(2) }}
+            </td>
+          </tr>
         </tbody>
       </table>
       <div v-if="transactionsStore.transactions.length === 0" class="text-center text-muted mt-3">
@@ -41,17 +47,17 @@
 </template>
 
 <script setup lang="ts">
-import { useI18n } from 'vue-i18n';
-import { useTransactionsStore } from '@/stores/transactions';
+import { useI18n } from 'vue-i18n'
+import { useTransactionsStore } from '@/stores/transactions'
 
-const { t } = useI18n();
-const transactionsStore = useTransactionsStore();
+const { t } = useI18n()
+const transactionsStore = useTransactionsStore()
 
 const loadTransactions = () => {
-  const endDate = new Date().toISOString();
-  const startDate = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
-  transactionsStore.fetchUserTransactions(startDate, endDate);
-};
+  const endDate = new Date().toISOString()
+  const startDate = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString()
+  transactionsStore.fetchUserTransactions(startDate, endDate, t)
+}
 
 // We will call this from the main Dashboard.vue component to initiate data loading
 </script>

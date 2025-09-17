@@ -4,7 +4,10 @@
     "register": "Register",
     "dashboard": "Dashboard",
     "logout": "Log Out",
-    "submit": "Submit"
+    "submit": "Submit",
+    "loading": "Loading...",
+    "close": "Close",
+    "save": "Save"
   },
   "loginPage": {
     "title": "Welcome Back!",
@@ -12,15 +15,22 @@
     "passwordLabel": "Password"
   },
   "dashboardPage": {
-    "welcomeMessage": "Welcome, {name}!",
+    "title": "Dashboard",
+    "addTransaction": "Add Transaction",
+    "balanceTitle": "Current Balance",
+    "expensesTitle": "Expenses by Category",
+    "expensesLabel": "Expenses",
     "transactionsTitle": "Recent Transactions"
   },
-  "errors": {
-    "connectionFailed": "Connection to the server failed. Please try again later.",
-    "invalidCredentials": "Invalid email or password.",
-    "noAuthToken": "Authentication token not found.",
-    "apiError": "API request failed with status {status}.",
-    "fetchFailed": "Failed to retrieve data from the server."
+  "transactionForm": {
+    "title": "Add New Transaction",
+    "amount": "Amount",
+    "description": "Description",
+    "date": "Date",
+    "type": "Type",
+    "income": "Income",
+    "expense": "Expense",
+    "category": "Category"
   },
   "transactionsTable": {
     "date": "Date",
@@ -28,5 +38,12 @@
     "category": "Category",
     "amount": "Amount",
     "noTransactions": "No transactions found for the selected period."
+  },
+  "errors": {
+    "connectionFailed": "Connection to the server failed. Please try again later.",
+    "invalidCredentials": "Invalid email or password.",
+    "noAuthToken": "Authentication token not found.",
+    "apiError": "API request failed with status: {status}.",
+    "fetchFailed": "Failed to retrieve data from the server."
   }
 }
