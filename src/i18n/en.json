@@ -1,0 +1,21 @@
+{
+  "general": {
+    "login": "Log In",
+    "register": "Register",
+    "dashboard": "Dashboard",
+    "logout": "Log Out",
+    "submit": "Submit"
+  },
+  "loginPage": {
+    "title": "Welcome Back!",
+    "emailLabel": "Email Address",
+    "passwordLabel": "Password"
+  },
+  "dashboardPage": {
+    "welcomeMessage": "Welcome, {name}!"
+  },
+  "errors": {
+    "connectionFailed": "Connection to the server failed. Please try again later.",
+    "invalidCredentials": "Invalid email or password."
+  }
+}
