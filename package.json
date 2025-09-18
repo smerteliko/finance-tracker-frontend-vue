@@ -21,6 +21,7 @@
     "@fortawesome/free-regular-svg-icons": "^7.0.1",
     "@fortawesome/free-solid-svg-icons": "^7.0.1",
     "@fortawesome/vue-fontawesome": "^3.1.2",
+    "@pinia/testing": "^1.0.2",
     "axios": "^1.12.2",
     "bootstrap": "^5.3.8",
     "chart.js": "^4.5.0",

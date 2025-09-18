@@ -33,7 +33,6 @@ export const useAuthStore = defineStore('auth', {
           firstName: firstName,
           lastName: lastName,
         }
-        console.log(response.data)
         this.isAuthenticated = true
         localStorage.setItem('token', this.token!)
         localStorage.setItem('user', JSON.stringify(this.user))
