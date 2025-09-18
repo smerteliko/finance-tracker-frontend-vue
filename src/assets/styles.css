@@ -1,0 +1,42 @@
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: #f0f2f5;
+  color: #333;
+}
+
+.card {
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.offcanvas-lg {
+  box-shadow: 4px 0 12px rgba(0, 0, 0, 0.05);
+}
+.nav-link {
+  border-radius: 8px;
+  margin-bottom: 5px;
+}
+.nav-link.active {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+h1,
+h2,
+h5 {
+  font-weight: 600;
+}
+
+.btn-primary {
+  background-color: #007bff;
+  border-color: #007bff;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+  border-color: #004085;
+}
+
+.form-control:focus {
+  box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.25);
+}
