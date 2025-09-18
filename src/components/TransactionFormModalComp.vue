@@ -77,7 +77,7 @@
 import { ref, reactive, onMounted, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import axios from 'axios'
-import { useAuthStore } from '@/stores/auth'
+import { useAuthStore } from '@/stores/authStore.ts'
 
 const { t } = useI18n()
 const authStore = useAuthStore()

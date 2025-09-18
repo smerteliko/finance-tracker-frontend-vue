@@ -32,12 +32,12 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useTransactionsStore } from '@/stores/transactions'
-import { useAuthStore } from '@/stores/auth'
-import BalanceCard from '@/components/BalanceCard.vue'
-import ChartSection from '@/components/ChartSection.vue'
-import TransactionList from '@/components/TransactionList.vue'
-import TransactionFormModal from '@/components/TransactionFormModal.vue'
+import { useTransactionsStore } from '@/stores/transactionsStore.ts'
+import { useAuthStore } from '@/stores/authStore.ts'
+import BalanceCard from '@/components/BalanceCardComp.vue'
+import ChartSection from '@/components/ChartSectionComp.vue'
+import TransactionList from '@/components/TransactionListComp.vue'
+import TransactionFormModal from '@/components/TransactionFormModalComp.vue'
 
 const { t } = useI18n()
 const transactionsStore = useTransactionsStore()

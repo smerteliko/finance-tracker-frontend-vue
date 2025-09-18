@@ -1,8 +1,8 @@
 // src/router/index.ts
 import { createRouter, createWebHistory } from 'vue-router'
-import { useAuthStore } from '@/stores/auth'
-import Login from '../views/Login.vue'
-import Dashboard from '../views/Dashboard.vue'
+import { useAuthStore } from '@/stores/authStore.ts'
+import Login from '../views/LoginView.vue'
+import Dashboard from '../views/DashboardView.vue'
 
 const router = createRouter({
   history: createWebHistory(),

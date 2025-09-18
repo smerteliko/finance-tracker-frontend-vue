@@ -17,7 +17,7 @@
 <script setup lang="ts">
 import { ref, onMounted, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useTransactionsStore } from '@/stores/transactions'
+import { useTransactionsStore } from '@/stores/transactionsStore.ts'
 import Chart from 'chart.js/auto'
 
 const { t } = useI18n()

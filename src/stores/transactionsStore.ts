@@ -1,7 +1,7 @@
 // src/stores/transactions.ts
 import { defineStore } from 'pinia'
 import axios from 'axios'
-import { useAuthStore } from './auth'
+import { useAuthStore } from './authStore.ts'
 
 // Define data structures for type safety
 interface Transaction {

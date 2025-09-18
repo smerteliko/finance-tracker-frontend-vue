@@ -48,7 +48,7 @@
 
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
-import { useTransactionsStore } from '@/stores/transactions'
+import { useTransactionsStore } from '@/stores/transactionsStore.ts'
 
 const { t } = useI18n()
 const transactionsStore = useTransactionsStore()

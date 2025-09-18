@@ -3,10 +3,16 @@ import { defineStore } from 'pinia'
 import axios from 'axios'
 import router from '../router'
 
+interface User {
+  userId: number;
+  firstName: string;
+  lastName: string;
+}
+
 interface AuthState {
   token: string | null
   isAuthenticated: boolean
-  user: object | null | string
+  user: User | null
 }
 
 export const useAuthStore = defineStore('auth', {
@@ -20,15 +26,12 @@ export const useAuthStore = defineStore('auth', {
     async login(credentials: any) {
       try {
         const response = await axios.post('http://localhost:8080/api/auth/login', credentials)
-        this.token = response.data.token
-        this.user = {
-          firstName: response.data.firstName,
-          lastName: response.data.lastName,
-          userId: response.data.userId,
-        }
-        this.isAuthenticated = true
-        localStorage.setItem('token', this.token!)
-        localStorage.setItem('user', JSON.stringify(this.user)!)
+        const { token, user } = response.data; // Assume backend returns token and user object
+        this.token = token;
+        this.user = user;
+        this.isAuthenticated = true;
+        localStorage.setItem('token', this.token!);
+        localStorage.setItem('user', JSON.stringify(this.user));
         router.push({ name: 'dashboard' })
       } catch (error: any) {
         if (error.response && error.response.status === 401) {
@@ -40,10 +43,22 @@ export const useAuthStore = defineStore('auth', {
     },
 
     logout() {
-      this.token = null
-      this.isAuthenticated = false
-      localStorage.removeItem('token')
-      router.push({ name: 'login' })
+      this.token = null;
+      this.user = null;
+      this.isAuthenticated = false;
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      router.push({ name: 'login' });
     },
+
+    initializeFromLocalStorage() {
+      const token = localStorage.getItem('token');
+      const user = localStorage.getItem('user');
+      if (token && user) {
+        this.token = token;
+        this.user = JSON.parse(user);
+        this.isAuthenticated = true;
+      }
+    }
   },
 })
