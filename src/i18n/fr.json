@@ -1,0 +1,81 @@
+{
+  "general": {
+    "appName": "Suivi Financier",
+    "login": "Se connecter",
+    "register": "S'inscrire",
+    "dashboard": "Tableau de bord",
+    "logout": "Déconnexion",
+    "submit": "Soumettre",
+    "loading": "Chargement...",
+    "close": "Fermer",
+    "save": "Enregistrer",
+    "welcome": "Bienvenue",
+    "language": "Langue"
+  },
+  "loginPage": {
+    "title": "Bienvenue à nouveau !",
+    "emailLabel": "Adresse e-mail",
+    "passwordLabel": "Mot de passe",
+    "noAccount": "Vous n'avez pas de compte ? Inscrivez-vous ici."
+  },
+  "registerPage": {
+    "title": "Créer un compte",
+    "firstNameLabel": "Prénom",
+    "lastNameLabel": "Nom de famille",
+    "emailLabel": "Adresse e-mail",
+    "passwordLabel": "Mot de passe",
+    "alreadyHaveAccount": "Vous avez déjà un compte ? Connectez-vous ici."
+  },
+  "dashboardPage": {
+    "title": "Tableau de bord",
+    "addTransaction": "Ajouter une transaction",
+    "addCategory": "Ajouter une catégorie",
+    "balanceTitle": "Solde actuel",
+    "period": "Période",
+    "totalIncome": "Revenu",
+    "totalExpenses": "Dépenses",
+    "analysisTitle": "Analyse financière",
+    "expensesTitle": "Dépenses par catégorie",
+    "expensesLabel": "Dépenses",
+    "incomeTitle": "Revenu par catégorie",
+    "incomeLabel": "Revenu",
+    "monthPeriod": "Mois actuel",
+    "allTimePeriod": "Toutes les périodes",
+    "transactionsTitle": "Transactions récentes",
+    "incomeTransactions": "Transactions de revenu",
+    "expenseTransactions": "Transactions de dépense"
+  },
+  "transactionForm": {
+    "title": "Ajouter une transaction",
+    "amount": "Montant",
+    "description": "Description",
+    "date": "Date",
+    "type": "Type",
+    "income": "Revenu",
+    "expense": "Dépense",
+    "category": "Catégorie"
+  },
+  "categoryForm": {
+    "title": "Ajouter une catégorie",
+    "name": "Nom",
+    "type": "Type",
+    "income": "Revenu",
+    "expense": "Dépense",
+    "color": "Couleur"
+  },
+  "transactionsTable": {
+    "date": "Date",
+    "description": "Description",
+    "category": "Catégorie",
+    "amount": "Montant",
+    "noTransactions": "Aucune transaction trouvée pour la période sélectionnée."
+  },
+  "errors": {
+    "connectionFailed": "La connexion au serveur a échoué. Veuillez réessayer plus tard.",
+    "invalidCredentials": "Identifiants invalides.",
+    "noAuthToken": "Jeton d'authentification introuvable.",
+    "apiError": "La requête API a échoué avec le statut : {status}.",
+    "fetchFailed": "Échec de la récupération des données du serveur.",
+    "registrationFailed": "Échec de l'inscription. Veuillez réessayer."
+  }
+}

@@ -7,6 +7,7 @@ import { createI18n } from 'vue-i18n'
 // Import Bootstrap CSS
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap/dist/js/bootstrap.js'
+import './assets/styles.css'
 
 // Import Font Awesome
 import { library } from '@fortawesome/fontawesome-svg-core'
@@ -16,6 +17,8 @@ import { far } from '@fortawesome/free-regular-svg-icons'
 
 // Import our translation files
 import en from './i18n/en.json'
+import ru from './i18n/ru.json'
+import fr from './i18n/fr.json'
 
 // Create i18n instance with our translations
 const i18n = createI18n({
@@ -23,6 +26,8 @@ const i18n = createI18n({
   fallbackLocale: 'en',
   messages: {
     en,
+    ru,
+    fr,
   },
 })
 
