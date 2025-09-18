@@ -2,6 +2,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { useAuthStore } from '@/stores/authStore.ts'
 import Login from '../views/LoginView.vue'
+import Register from '../views/RegisterView.vue'
 import Dashboard from '../views/DashboardView.vue'
 
 const router = createRouter({
@@ -17,6 +18,11 @@ const router = createRouter({
       path: '/login',
       name: 'login',
       component: Login,
+    },
+    {
+      path: '/register', // Add the new registration path
+      name: 'register',
+      component: Register,
     },
   ],
 })

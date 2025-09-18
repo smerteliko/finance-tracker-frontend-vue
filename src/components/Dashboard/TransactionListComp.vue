@@ -58,8 +58,6 @@ const loadTransactions = () => {
   const startDate = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString()
   transactionsStore.fetchUserTransactions(startDate, endDate, t)
 }
-
-// We will call this from the main Dashboard.vue component to initiate data loading
 </script>
 
 <style scoped>

@@ -76,54 +76,45 @@
 <script setup lang="ts">
 import { ref, reactive, onMounted, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
-import axios from 'axios'
 import { useAuthStore } from '@/stores/authStore.ts'
+import { useCategoryStore } from '@/stores/categoryStore.ts'
+import { useTransactionsStore } from '@/stores/transactionsStore.ts'
+import { Modal } from 'bootstrap'
 
 const { t } = useI18n()
 const authStore = useAuthStore()
+const categoryStore = useCategoryStore()
+const transactionStore = useTransactionsStore()
 const emit = defineEmits(['transactionAdded'])
+
+const modalElement = ref<HTMLElement | null>(null)
+let bootstrapModal: Modal | null = null
 
 const form = reactive({
   amount: 0,
   description: '',
   date: '',
   type: 'EXPENSE',
-  userId: authStore.user?.userId, // Assuming user ID is stored in auth store
+  userId: authStore.user?.userId,
   categoryId: null,
 })
 
-const categories = ref([])
-
-const fetchCategories = async () => {
-  try {
-    const headers = { Authorization: `Bearer ${authStore.token}` }
-    const response = await axios.get('http://localhost:8080/api/categories', { headers })
-    categories.value = response.data
-  } catch (error) {
-    console.error('Failed to fetch categories:', error)
-  }
-}
+const categories = ref(categoryStore.categories)
 
 const saveTransaction = async () => {
   try {
-    const headers = { Authorization: `Bearer ${authStore.token}` }
-    const response = await axios.post(
-      'http://localhost:8080/api/transactions',
+    await transactionStore.createTransaction(
       {
         ...form,
         date: new Date(form.date).toISOString(), // Ensure date is in ISO format
       },
-      { headers },
+      t,
     )
 
     // Close modal and emit event to parent component
-    const modal = document.getElementById('transactionModal')
-    if (modal) {
-      modal.classList.remove('show')
-      modal.style.display = 'none'
-      document.body.classList.remove('modal-open')
+    if (bootstrapModal) {
+      bootstrapModal.hide()
     }
-
     emit('transactionAdded')
   } catch (error) {
     console.error('Failed to save transaction:', error)
@@ -131,7 +122,12 @@ const saveTransaction = async () => {
 }
 
 onMounted(() => {
-  fetchCategories()
+  if (authStore.isAuthenticated) {
+    categoryStore.fetchCategories(t)
+  }
+  if (modalElement.value) {
+    bootstrapModal = new Modal(modalElement.value)
+  }
 })
 </script>
 

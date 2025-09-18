@@ -29,6 +29,9 @@
               <button type="submit" class="btn btn-primary">{{ t('general.login') }}</button>
             </div>
           </form>
+          <div class="text-center mt-3">
+            <router-link to="/register">{{ t('loginPage.noAccount') }}</router-link>
+          </div>
           <div v-if="loginError" class="alert alert-danger mt-3">
             {{ t('errors.invalidCredentials') }}
           </div>
@@ -54,7 +57,7 @@ const handleLogin = async () => {
   try {
     await authStore.login({ email: email.value, password: password.value })
   } catch (error) {
-    console.log(error)
+    console.error(error)
     loginError.value = true
   }
 }
