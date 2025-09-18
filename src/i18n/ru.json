@@ -1,0 +1,81 @@
+{
+  "general": {
+    "appName": "Управление финансами",
+    "login": "Войти",
+    "register": "Регистрация",
+    "dashboard": "Дашборд",
+    "logout": "Выйти",
+    "submit": "Отправить",
+    "loading": "Загрузка...",
+    "close": "Закрыть",
+    "save": "Сохранить",
+    "welcome": "Добро пожаловать",
+    "language": "Язык"
+  },
+  "loginPage": {
+    "title": "С возвращением!",
+    "emailLabel": "Электронная почта",
+    "passwordLabel": "Пароль",
+    "noAccount": "Нет аккаунта? Зарегистрируйтесь."
+  },
+  "registerPage": {
+    "title": "Создание аккаунта",
+    "firstNameLabel": "Имя",
+    "lastNameLabel": "Фамилия",
+    "emailLabel": "Электронная почта",
+    "passwordLabel": "Пароль",
+    "alreadyHaveAccount": "Уже есть аккаунт? Войдите здесь."
+  },
+  "dashboardPage": {
+    "title": "Дашборд",
+    "addTransaction": "Добавить транзакцию",
+    "addCategory": "Добавить категорию",
+    "balanceTitle": "Текущий баланс",
+    "period": "Период",
+    "totalIncome": "Доходы",
+    "totalExpenses": "Расходы",
+    "analysisTitle": "Финансовый анализ",
+    "expensesTitle": "Расходы по категориям",
+    "expensesLabel": "Расходы",
+    "incomeTitle": "Доходы по категориям",
+    "incomeLabel": "Доходы",
+    "monthPeriod": "Текущий месяц",
+    "allTimePeriod": "За все время",
+    "transactionsTitle": "Последние транзакции",
+    "incomeTransactions": "Транзакций доходов",
+    "expenseTransactions": "Транзакций расходов"
+  },
+  "transactionForm": {
+    "title": "Добавить новую транзакцию",
+    "amount": "Сумма",
+    "description": "Описание",
+    "date": "Дата",
+    "type": "Тип",
+    "income": "Доход",
+    "expense": "Расход",
+    "category": "Категория"
+  },
+  "categoryForm": {
+    "title": "Добавить новую категорию",
+    "name": "Название",
+    "type": "Тип",
+    "income": "Доход",
+    "expense": "Расход",
+    "color": "Цвет"
+  },
+  "transactionsTable": {
+    "date": "Дата",
+    "description": "Описание",
+    "category": "Категория",
+    "amount": "Сумма",
+    "noTransactions": "Транзакций за выбранный период не найдено."
+  },
+  "errors": {
+    "connectionFailed": "Не удалось подключиться к серверу. Попробуйте позже.",
+    "invalidCredentials": "Неверная электронная почта или пароль.",
+    "noAuthToken": "Токен авторизации не найден.",
+    "apiError": "Ошибка API-запроса, статус: {status}.",
+    "fetchFailed": "Не удалось получить данные с сервера.",
+    "registrationFailed": "Ошибка регистрации. Попробуйте снова."
+  }
+}

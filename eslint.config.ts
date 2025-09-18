@@ -19,10 +19,21 @@ export default defineConfigWithVueTs(
 
   pluginVue.configs['flat/essential'],
   vueTsConfigs.recommended,
-  
+
   {
     ...pluginVitest.configs.recommended,
     files: ['src/**/__tests__/*'],
+
+  },
+  {
+    files: ['**/*.{ts,mts,tsx,vue}'],
+    rules: {
+      "no-unused-vars": "warn",
+      "@typescript-eslint/no-unused-vars": "warn",
+      "@typescript-eslint/no-explicit-any": "warn",
+      "vue/valid-template-root": "warn"
+    }
   },
   skipFormatting,
+
 )

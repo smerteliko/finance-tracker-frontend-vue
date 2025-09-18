@@ -1,21 +1,81 @@
 {
   "general": {
+    "appName": "Finance Tracker",
     "login": "Log In",
     "register": "Register",
     "dashboard": "Dashboard",
     "logout": "Log Out",
-    "submit": "Submit"
+    "submit": "Submit",
+    "loading": "Loading...",
+    "close": "Close",
+    "save": "Save",
+    "welcome": "Welcome",
+    "language": "Language"
   },
   "loginPage": {
     "title": "Welcome Back!",
     "emailLabel": "Email Address",
-    "passwordLabel": "Password"
+    "passwordLabel": "Password",
+    "noAccount": "Don't have an account? Register here."
+  },
+  "registerPage": {
+    "title": "Create an Account",
+    "firstNameLabel": "First Name",
+    "lastNameLabel": "Last Name",
+    "emailLabel": "Email Address",
+    "passwordLabel": "Password",
+    "alreadyHaveAccount": "Already have an account? Login here."
   },
   "dashboardPage": {
-    "welcomeMessage": "Welcome, {name}!"
+    "title": "Dashboard",
+    "addTransaction": "Add Transaction",
+    "addCategory": "Add Category",
+    "balanceTitle": "Current Balance",
+    "period": "Period",
+    "totalIncome": "Income",
+    "totalExpenses": "Expenses",
+    "analysisTitle": "Financial Analysis",
+    "expensesTitle": "Expenses by Category",
+    "expensesLabel": "Expenses",
+    "incomeTitle": "Income by Category",
+    "incomeLabel": "Income",
+    "monthPeriod": "Current Month",
+    "allTimePeriod": "All Time",
+    "transactionsTitle": "Recent Transactions",
+    "incomeTransactions": "Income Transactions",
+    "expenseTransactions": "Expense Transactions"
+  },
+  "transactionForm": {
+    "title": "Add New Transaction",
+    "amount": "Amount",
+    "description": "Description",
+    "date": "Date",
+    "type": "Type",
+    "income": "Income",
+    "expense": "Expense",
+    "category": "Category"
+  },
+  "categoryForm": {
+    "title": "Add New Category",
+    "name": "Name",
+    "type": "Type",
+    "income": "Income",
+    "expense": "Expense",
+    "color": "Color"
+  },
+  "transactionsTable": {
+    "date": "Date",
+    "description": "Description",
+    "category": "Category",
+    "amount": "Amount",
+    "noTransactions": "No transactions found for the selected period."
   },
   "errors": {
     "connectionFailed": "Connection to the server failed. Please try again later.",
-    "invalidCredentials": "Invalid email or password."
+    "invalidCredentials": "Invalid email or password.",
+    "noAuthToken": "Authentication token not found.",
+    "apiError": "API request failed with status: {status}.",
+    "fetchFailed": "Failed to retrieve data from the server.",
+    "registrationFailed": "Registration failed. Please try again."
   }
 }
