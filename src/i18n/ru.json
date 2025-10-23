@@ -1,81 +1,115 @@
 {
   "general": {
-    "appName": "Управление финансами",
-    "login": "Войти",
-    "register": "Регистрация",
-    "dashboard": "Дашборд",
-    "logout": "Выйти",
-    "submit": "Отправить",
-    "loading": "Загрузка...",
-    "close": "Закрыть",
-    "save": "Сохранить",
+    "appName": "Финансовый Трекер",
     "welcome": "Добро пожаловать",
-    "language": "Язык"
+    "dashboard": "Дашборд",
+    "login": "Войти",
+    "register": "Зарегистрироваться",
+    "logout": "Выйти",
+    "save": "Сохранить",
+    "close": "Закрыть",
+    "cancel": "Отмена",
+    "delete": "Удалить",
+    "edit": "Редактировать",
+    "loading": "Загрузка...",
+    "actions": "Действия"
   },
   "loginPage": {
     "title": "С возвращением!",
-    "emailLabel": "Электронная почта",
+    "emailLabel": "Email адрес",
     "passwordLabel": "Пароль",
-    "noAccount": "Нет аккаунта? Зарегистрируйтесь."
+    "noAccount": "Нет аккаунта? Зарегистрируйтесь здесь."
   },
   "registerPage": {
-    "title": "Создание аккаунта",
+    "title": "Создать аккаунт",
     "firstNameLabel": "Имя",
     "lastNameLabel": "Фамилия",
-    "emailLabel": "Электронная почта",
+    "emailLabel": "Email адрес",
     "passwordLabel": "Пароль",
     "alreadyHaveAccount": "Уже есть аккаунт? Войдите здесь."
   },
   "dashboardPage": {
     "title": "Дашборд",
-    "addTransaction": "Добавить транзакцию",
-    "addCategory": "Добавить категорию",
     "balanceTitle": "Текущий баланс",
-    "period": "Период",
-    "totalIncome": "Доходы",
-    "totalExpenses": "Расходы",
-    "analysisTitle": "Финансовый анализ",
-    "expensesTitle": "Расходы по категориям",
+    "financialOverview": "Финансовый обзор",
+    "expensesTitle": "Расходы",
+    "incomeTitle": "Доходы",
+    "expensesByCategory": "Расходы по категориям",
+    "incomeByCategory": "Доходы по категориям",
     "expensesLabel": "Расходы",
-    "incomeTitle": "Доходы по категориям",
     "incomeLabel": "Доходы",
-    "monthPeriod": "Текущий месяц",
-    "allTimePeriod": "За все время",
-    "transactionsTitle": "Последние транзакции",
-    "incomeTransactions": "Транзакций доходов",
-    "expenseTransactions": "Транзакций расходов"
+    "totalIncome": "Всего доходов",
+    "totalExpenses": "Всего расходов",
+    "period": "Период",
+    "currentPeriod": "Текущий период",
+    "addTransaction": "Добавить транзакцию",
+    "addCategory": "Добавить категорию"
+  },
+  "transactions": {
+    "title": "Все транзакции",
+    "noTransactions": "Транзакции не найдены",
+    "noDescription": "Без описания",
+    "adjustFilters": "Попробуйте изменить фильтры или добавьте новые транзакции.",
+    "exportCsv": "Скачать CSV",
+    "showing": "Показано {count} из {total} транзакций",
+    "income": "Доход",
+    "expense": "Расход"
+  },
+  "transactionDetails": {
+    "title": "Детали транзакции",
+    "description": "Описание",
+    "noDescription": "Описание отсутствует",
+    "category": "Категория",
+    "date": "Дата и время",
+    "transactionId": "ID транзакции",
+    "confirmDelete": "Вы уверены, что хотите удалить эту транзакцию? Это действие нельзя отменить."
   },
   "transactionForm": {
-    "title": "Добавить новую транзакцию",
+    "title": "Добавить транзакцию",
     "amount": "Сумма",
     "description": "Описание",
     "date": "Дата",
     "type": "Тип",
+    "category": "Категория",
     "income": "Доход",
     "expense": "Расход",
-    "category": "Категория"
+    "selectCategory": "Выберите категорию"
   },
   "categoryForm": {
-    "title": "Добавить новую категорию",
-    "name": "Название",
+    "title": "Добавить категорию",
+    "name": "Название категории",
+    "type": "Тип категории",
+    "color": "Цвет",
+    "income": "Доход",
+    "expense": "Расход"
+  },
+  "filters": {
+    "dateRange": "Период",
+    "thisMonth": "Этот месяц",
+    "lastMonth": "Прошлый месяц",
+    "thisQuarter": "Этот квартал",
+    "thisYear": "Этот год",
+    "custom": "Выбрать",
+    "from": "С",
+    "to": "По",
     "type": "Тип",
+    "allTypes": "Все типы",
     "income": "Доход",
     "expense": "Расход",
-    "color": "Цвет"
-  },
-  "transactionsTable": {
-    "date": "Дата",
-    "description": "Описание",
     "category": "Категория",
-    "amount": "Сумма",
-    "noTransactions": "Транзакций за выбранный период не найдено."
+    "allCategories": "Все категории",
+    "reset": "Сбросить фильтры"
   },
   "errors": {
-    "connectionFailed": "Не удалось подключиться к серверу. Попробуйте позже.",
-    "invalidCredentials": "Неверная электронная почта или пароль.",
-    "noAuthToken": "Токен авторизации не найден.",
-    "apiError": "Ошибка API-запроса, статус: {status}.",
-    "fetchFailed": "Не удалось получить данные с сервера.",
-    "registrationFailed": "Ошибка регистрации. Попробуйте снова."
+    "invalidCredentials": "Неверный email или пароль.",
+    "registrationFailed": "Ошибка регистрации. Попробуйте еще раз.",
+    "loadTransactionsFailed": "Не удалось загрузить транзакции. Попробуйте еще раз.",
+    "exportFailed": "Не удалось экспортировать транзакции. Попробуйте еще раз.",
+    "createTransactionFailed": "Не удалось создать транзакцию. Попробуйте еще раз.",
+    "createCategoryFailed": "Не удалось создать категорию. Попробуйте еще раз.",
+    "selectCategory": "Пожалуйста, выберите категорию",
+    "transactionNotFound": "Транзакция не найдена",
+    "loadTransactionFailed": "Не удалось загрузить детали транзакции",
+    "deleteTransactionFailed": "Не удалось удалить транзакцию"
   }
 }

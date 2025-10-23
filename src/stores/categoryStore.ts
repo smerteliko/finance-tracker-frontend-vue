@@ -2,19 +2,7 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
 import { useAuthStore } from './authStore'
-
-interface Category {
-  id: number
-  name: string
-  color: string
-  type: string
-}
-
-interface CategoryState {
-  categories: Category[]
-  loading: boolean
-  error: string | null
-}
+import type { CategoryState } from '@/types'
 
 export const useCategoryStore = defineStore('category', {
   state: (): CategoryState => ({

@@ -2,38 +2,7 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
 import { useAuthStore } from './authStore.ts'
-
-// Define data structures for type safety
-interface Transaction {
-  id: number
-  amount: number
-  type: string
-  description: string
-  date: string
-  categoryName: string
-  categoryColor: string
-}
-
-interface AnalyticsResponse {
-  totalIncome: number
-  totalExpense: number
-  balance: number
-  expensesByCategory: Record<string, number>
-  incomeByCategory: Record<string, number>
-  transactionCount: number
-  periodStart: Date
-  periodEnd: Date
-}
-
-interface TransactionsState {
-  transactions: Transaction[]
-  analytics: AnalyticsResponse | null
-  transactionSummary: string | null
-  loading: boolean
-  error: string | null
-}
-
-const API_URL = 'http://localhost:8080/api'
+import type { TransactionsState } from '@/types'
 
 export const useTransactionsStore = defineStore('transactions', {
   state: (): TransactionsState => ({
@@ -43,7 +12,12 @@ export const useTransactionsStore = defineStore('transactions', {
     loading: false,
     error: null,
   }),
-
+  getters: {
+    recentTransactions: (state) => state.transactions.slice(0, 5),
+    totalIncome: (state) => state.analytics?.totalIncome || 0,
+    totalExpense: (state) => state.analytics?.totalExpense || 0,
+    balance: (state) => state.analytics?.balance || 0,
+  },
   actions: {
     async fetchAnalytics(startDate: string, endDate: string, t: any) {
       this.loading = true
@@ -132,7 +106,7 @@ export const useTransactionsStore = defineStore('transactions', {
 
         const headers = { Authorization: `Bearer ${authStore.token}` }
         const response = await axios.post(
-          `${API_URL}/reports/summary`,
+          `${import.meta.env.VITE_API_URL}/reports/summary`,
           { startDate, endDate },
           { headers },
         )
@@ -146,6 +120,20 @@ export const useTransactionsStore = defineStore('transactions', {
       } finally {
         this.loading = false
       }
+    },
+    handleError(error: any, t: any, customMessageKey?: string) {
+      if (error.response?.status === 401) {
+        const authStore = useAuthStore()
+        authStore.logout()
+      } else if (customMessageKey) {
+        this.error = t(customMessageKey)
+      } else {
+        this.error = t('errors.fetchFailed')
+      }
+    },
+
+    clearError() {
+      this.error = null
     },
   },
 })

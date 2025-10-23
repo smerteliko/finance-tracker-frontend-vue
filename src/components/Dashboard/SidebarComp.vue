@@ -6,7 +6,7 @@
   >
     <div class="d-flex flex-column h-100">
       <div class="d-flex align-items-center justify-content-between p-3 border-bottom">
-        <router-link class="text-decoration-none text-white" to="/">
+        <router-link class="nav-link text-decoration-none text-white" to="/">
           <font-awesome-icon icon="dollar-sign" size="xl" />
           <span class="ms-2 fw-bold">{{ t('general.appName') }}</span>
         </router-link>
@@ -43,16 +43,34 @@
             data-bs-target="#categoryModal"
           >
             <font-awesome-icon icon="tags" />
-            <span v-if="isSidebarExpanded" class="ms-2">{{ t('dashboardPage.addCategory') }}</span>
+            <span class="ms-2">{{ t('dashboardPage.addCategory') }}</span>
           </button>
         </li>
       </ul>
 
       <div class="mt-auto p-3 border-top">
         <div class="mb-3 d-flex justify-content-center">
-          <button class="btn btn-sm btn-outline-light me-2" @click="changeLocale('en')">EN</button>
-          <button class="btn btn-sm btn-outline-light me-2" @click="changeLocale('ru')">RU</button>
-          <button class="btn btn-sm btn-outline-light" @click="changeLocale('fr')">FR</button>
+          <button
+            class="btn btn-sm me-2"
+            :class="locale === 'en' ? 'btn-light' : 'btn-outline-light'"
+            @click="changeLocale('en')"
+          >
+            EN
+          </button>
+          <button
+            class="btn btn-sm me-2"
+            :class="locale === 'ru' ? 'btn-light' : 'btn-outline-light'"
+            @click="changeLocale('ru')"
+          >
+            RU
+          </button>
+          <button
+            class="btn btn-sm"
+            :class="locale === 'fr' ? 'btn-light' : 'btn-outline-light'"
+            @click="changeLocale('fr')"
+          >
+            FR
+          </button>
         </div>
         <button class="btn btn-danger w-100" @click="authStore.logout">
           <font-awesome-icon icon="sign-out-alt" />
@@ -65,7 +83,7 @@
 
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
-import { useAuthStore } from '@/stores/authStore.ts'
+import { useAuthStore } from '@/stores/authStore'
 import { Modal } from 'bootstrap'
 import { ref } from 'vue'
 
@@ -74,6 +92,7 @@ const authStore = useAuthStore()
 
 const changeLocale = (newLocale: string) => {
   locale.value = newLocale
+  localStorage.setItem('userLocale', newLocale)
 }
 
 const isSidebarExpanded = ref(window.innerWidth >= 992)
@@ -103,5 +122,21 @@ const openTransactionModal = () => {
     height: 100vh;
     border-right: 1px solid #dee2e6;
   }
+}
+
+.nav-link {
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+  padding: 0.75rem 1rem;
+}
+
+.nav-link:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.router-link-active {
+  background-color: rgba(255, 255, 255, 0.2);
 }
 </style>

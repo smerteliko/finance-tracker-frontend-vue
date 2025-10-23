@@ -1,16 +1,18 @@
 {
   "general": {
     "appName": "Finance Tracker",
+    "welcome": "Welcome",
+    "dashboard": "Dashboard",
     "login": "Log In",
     "register": "Register",
-    "dashboard": "Dashboard",
     "logout": "Log Out",
-    "submit": "Submit",
-    "loading": "Loading...",
-    "close": "Close",
     "save": "Save",
-    "welcome": "Welcome",
-    "language": "Language"
+    "close": "Close",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "loading": "Loading...",
+    "actions": "Actions"
   },
   "loginPage": {
     "title": "Welcome Back!",
@@ -19,7 +21,7 @@
     "noAccount": "Don't have an account? Register here."
   },
   "registerPage": {
-    "title": "Create an Account",
+    "title": "Create Account",
     "firstNameLabel": "First Name",
     "lastNameLabel": "Last Name",
     "emailLabel": "Email Address",
@@ -28,54 +30,86 @@
   },
   "dashboardPage": {
     "title": "Dashboard",
-    "addTransaction": "Add Transaction",
-    "addCategory": "Add Category",
     "balanceTitle": "Current Balance",
-    "period": "Period",
-    "totalIncome": "Income",
-    "totalExpenses": "Expenses",
-    "analysisTitle": "Financial Analysis",
-    "expensesTitle": "Expenses by Category",
+    "financialOverview": "Financial Overview",
+    "expensesTitle": "Expenses",
+    "incomeTitle": "Income",
+    "expensesByCategory": "Expenses by Category",
+    "incomeByCategory": "Income by Category",
     "expensesLabel": "Expenses",
-    "incomeTitle": "Income by Category",
     "incomeLabel": "Income",
-    "monthPeriod": "Current Month",
-    "allTimePeriod": "All Time",
-    "transactionsTitle": "Recent Transactions",
-    "incomeTransactions": "Income Transactions",
-    "expenseTransactions": "Expense Transactions"
+    "totalIncome": "Total Income",
+    "totalExpenses": "Total Expenses",
+    "period": "Period",
+    "currentPeriod": "Current period",
+    "addTransaction": "Add Transaction",
+    "addCategory": "Add Category"
+  },
+  "transactions": {
+    "title": "All Transactions",
+    "noTransactions": "No transactions found",
+    "noDescription": "No description",
+    "adjustFilters": "Try adjusting your filters or add new transactions.",
+    "exportCsv": "Download CSV",
+    "showing": "Showing {count} of {total} transactions",
+    "income": "Income",
+    "expense": "Expense"
+  },
+  "transactionDetails": {
+    "title": "Transaction Details",
+    "description": "Description",
+    "noDescription": "No description provided",
+    "category": "Category",
+    "date": "Date & Time",
+    "transactionId": "Transaction ID",
+    "confirmDelete": "Are you sure you want to delete this transaction? This action cannot be undone."
   },
   "transactionForm": {
-    "title": "Add New Transaction",
+    "title": "Add Transaction",
     "amount": "Amount",
     "description": "Description",
     "date": "Date",
     "type": "Type",
+    "category": "Category",
     "income": "Income",
     "expense": "Expense",
-    "category": "Category"
+    "selectCategory": "Select a category"
   },
   "categoryForm": {
-    "title": "Add New Category",
-    "name": "Name",
+    "title": "Add Category",
+    "name": "Category Name",
+    "type": "Category Type",
+    "color": "Color",
+    "income": "Income",
+    "expense": "Expense"
+  },
+  "filters": {
+    "dateRange": "Date Range",
+    "thisMonth": "This Month",
+    "lastMonth": "Last Month",
+    "thisQuarter": "This Quarter",
+    "thisYear": "This Year",
+    "custom": "Custom",
+    "from": "From",
+    "to": "To",
     "type": "Type",
+    "allTypes": "All Types",
     "income": "Income",
     "expense": "Expense",
-    "color": "Color"
-  },
-  "transactionsTable": {
-    "date": "Date",
-    "description": "Description",
     "category": "Category",
-    "amount": "Amount",
-    "noTransactions": "No transactions found for the selected period."
+    "allCategories": "All Categories",
+    "reset": "Reset Filters"
   },
   "errors": {
-    "connectionFailed": "Connection to the server failed. Please try again later.",
     "invalidCredentials": "Invalid email or password.",
-    "noAuthToken": "Authentication token not found.",
-    "apiError": "API request failed with status: {status}.",
-    "fetchFailed": "Failed to retrieve data from the server.",
-    "registrationFailed": "Registration failed. Please try again."
+    "registrationFailed": "Registration failed. Please try again.",
+    "loadTransactionsFailed": "Failed to load transactions. Please try again.",
+    "exportFailed": "Failed to export transactions. Please try again.",
+    "createTransactionFailed": "Failed to create transaction. Please try again.",
+    "createCategoryFailed": "Failed to create category. Please try again.",
+    "selectCategory": "Please select a category",
+    "transactionNotFound": "Transaction not found",
+    "loadTransactionFailed": "Failed to load transaction details",
+    "deleteTransactionFailed": "Failed to delete transaction"
   }
 }

@@ -26,7 +26,10 @@
               </div>
             </div>
             <div class="d-grid gap-2">
-              <button type="submit" class="btn btn-primary">{{ t('general.login') }}</button>
+              <button type="submit" class="btn btn-primary" :disabled="loading">
+                <span v-if="loading" class="spinner-border spinner-border-sm me-2"></span>
+                {{ t('general.login') }}
+              </button>
             </div>
           </form>
           <div class="text-center mt-3">
@@ -44,21 +47,39 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useAuthStore } from '@/stores/authStore.ts'
+import { useAuthStore } from '@/stores/authStore'
+import { useRouter } from 'vue-router'
 
 const { t } = useI18n()
 const authStore = useAuthStore()
+const router = useRouter()
+
 const email = ref('')
 const password = ref('')
 const loginError = ref(false)
+const loading = ref(false)
 
 const handleLogin = async () => {
   loginError.value = false
+  loading.value = true
+
   try {
-    await authStore.login({ email: email.value, password: password.value })
+    await authStore.login({
+      email: email.value,
+      password: password.value,
+    })
+    router.push({ name: 'dashboard' })
   } catch (error) {
-    console.error(error)
+    console.error('Login error:', error)
     loginError.value = true
+  } finally {
+    loading.value = false
   }
 }
 </script>
+
+<style scoped>
+.card-title {
+  font-weight: bold;
+}
+</style>
