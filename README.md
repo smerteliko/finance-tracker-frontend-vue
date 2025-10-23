@@ -9,11 +9,14 @@ This repository contains the frontend client for the **Finance Tracker** applica
 
 The project showcases best practices in frontend development, including:
 
-* **Component-based architecture** with the Composition API.
-* **Centralized state management** using Pinia.
-* **Secure API communication** with Axios and JWT authentication.
-* **Internationalization** support with `vue-i18n`.
-* **Responsive design** for an optimal experience on both desktop and mobile devices.
+* **Secure Authentication:** User registration and login with JWT authentication.
+* **Dashboard:** A dynamic dashboard displaying financial summaries, charts of expenses and income by category, and recent transactions.
+* **Transaction Management:** Add, view, edit, and delete transactions with modal forms and detailed views.
+* **Category Management:** Add and manage custom categories for transactions.
+* **Advanced Filtering:** Filter transactions by date range, type, and category with pagination support.
+* **Data Export:** Export transaction data to CSV format.
+* **Multi-language Support:** Easily switch between English, Russian, and French.
+* **Responsive UI:** A mobile-first design that adapts gracefully to various screen sizes, featuring a collapsed sidebar on mobile devices.
 
 ## 🚀 Key Features
 
@@ -35,6 +38,9 @@ The project showcases best practices in frontend development, including:
 * **Charts:** Chart.js
 * **API Client:** Axios
 * **Localization:** `vue-i18n`
+* **Testing:** Vitest + Vue Test Utils
+* **Build Tool:** Vite
+
 
 ## ⚙️ Getting Started
 
@@ -95,8 +101,11 @@ The project follows a standard Vue 3 project structure, organized to promote mai
 * **`src/components/`**: Reusable components like `BalanceCard.vue` and `TransactionFormModal.vue`.
 * **`src/views/`**: Main application pages, such as `Dashboard.vue` and `Login.vue`.
 * **`src/stores/`**: Pinia stores for centralized state management.
-* **`src/i18n/`**: Localization files for multi-language support.
+* **`src/services/`**: API service layers for handling HTTP requests.
+* **`src/locales/`**: Localization files for multi-language support.
+* **`src/types/`**: TypeScript type definitions and interfaces.
 * **`src/assets/`**: Global assets and styles.
+* **`src/__tests__/`**: Unit and integration tests.
 
 ## 🤝 Contributing
 
