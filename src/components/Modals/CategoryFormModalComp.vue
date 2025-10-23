@@ -5,6 +5,7 @@
     tabindex="-1"
     aria-labelledby="categoryModalLabel"
     aria-hidden="true"
+    ref="modalElement"
   >
     <div class="modal-dialog">
       <div class="modal-content">
@@ -43,7 +44,10 @@
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                 {{ t('general.close') }}
               </button>
-              <button type="submit" class="btn btn-primary">{{ t('general.save') }}</button>
+              <button type="submit" class="btn btn-primary" :disabled="loading">
+                <span v-if="loading" class="spinner-border spinner-border-sm me-2"></span>
+                {{ t('general.save') }}
+              </button>
             </div>
           </form>
         </div>
@@ -53,41 +57,63 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from 'vue'
+import { ref, reactive, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useCategoryStore } from '@/stores/categoryStore.ts'
-import { onMounted } from 'vue'
 import { Modal } from 'bootstrap'
-const modalElement = ref<HTMLElement | null>(null)
-let bootstrapModal: Modal | null = null
+import { useCategoryStore } from '@/stores/categoryStore'
 
 const { t } = useI18n()
 const categoryStore = useCategoryStore()
 const emit = defineEmits(['categoryAdded'])
 
+const modalElement = ref<HTMLElement | null>(null)
+let bootstrapModal: Modal | null = null
+const loading = ref(false)
+
 const form = reactive({
   name: '',
   color: '#000000',
-  type: 'EXPENSE',
+  type: 'EXPENSE' as 'INCOME' | 'EXPENSE',
 })
 
 const saveCategory = async () => {
+  loading.value = true
   try {
     await categoryStore.createCategory(form, t)
 
-    // Close modal and emit event to parent
+    // Reset form
+    form.name = ''
+    form.color = '#000000'
+    form.type = 'EXPENSE'
+
+    // Close modal and emit event
     if (bootstrapModal) {
       bootstrapModal.hide()
     }
     emit('categoryAdded')
   } catch (error) {
     console.error('Failed to save category:', error)
+    alert(t('errors.createCategoryFailed'))
+  } finally {
+    loading.value = false
   }
 }
+
+// Reset form when modal is shown
+const resetForm = () => {
+  form.name = ''
+  form.color = '#000000'
+  form.type = 'EXPENSE'
+}
+
+// defineExpose({
+//   show
+// })
 
 onMounted(() => {
   if (modalElement.value) {
     bootstrapModal = new Modal(modalElement.value)
+    modalElement.value.addEventListener('show.bs.modal', resetForm)
   }
 })
 </script>

@@ -48,7 +48,10 @@
               </div>
             </div>
             <div class="d-grid gap-2">
-              <button type="submit" class="btn btn-primary">{{ t('general.register') }}</button>
+              <button type="submit" class="btn btn-primary" :disabled="loading">
+                <span v-if="loading" class="spinner-border spinner-border-sm me-2"></span>
+                {{ t('general.register') }}
+              </button>
             </div>
           </form>
           <div v-if="registerError" class="alert alert-danger mt-3">{{ registerError }}</div>
@@ -76,9 +79,12 @@ const lastName = ref('')
 const email = ref('')
 const password = ref('')
 const registerError = ref('')
+const loading = ref(false)
 
 const handleRegister = async () => {
   registerError.value = ''
+  loading.value = true
+
   try {
     await authStore.register({
       firstName: firstName.value,
@@ -88,7 +94,9 @@ const handleRegister = async () => {
     })
     router.push({ name: 'dashboard' })
   } catch (error: any) {
-    registerError.value = t('errors.registrationFailed')
+    registerError.value = error.message || t('errors.registrationFailed')
+  } finally {
+    loading.value = false
   }
 }
 </script>
