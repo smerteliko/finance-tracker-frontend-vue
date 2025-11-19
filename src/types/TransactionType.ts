@@ -1,33 +1,57 @@
+// src/types/TransactionType.ts (Adding payload interface)
+import type { Category } from './CategoryType'
+import type { Account } from './AccountType'
+import type { TransactionTypeEnum } from './FiltersType'
+
 export interface Transaction {
-  id: number
-  uuid: string
-  amount: number
-  description: string
-  type: 'INCOME' | 'EXPENSE'
-  date: string
-  createdAt: string
-  updatedAt: string
-  userId: number
-  categoryId: number
-  categoryName: string
-  categoryColor: string
+  id: string;
+  amount: number;
+  description: string;
+  type: TransactionTypeEnum;
+  date: string; // Transaction date
+  createdAt: string;
+  updatedAt: string;
+
+  accountId: string;
+  notes: string | null;
+
+  category: Category;
+  account: Account;
+}
+
+export interface TransactionPayload {
+  amount: number;
+  description: string;
+  date: string;
+  type: TransactionTypeEnum;
+  categoryId: string;
+  accountId: string;
+  notes: string | null;
 }
 
 export interface AnalyticsResponse {
-  totalIncome: number
-  totalExpense: number
-  balance: number
-  expensesByCategory: Record<string, number>
-  incomeByCategory: Record<string, number>
-  transactionCount: number
-  periodStart: Date
-  periodEnd: Date
+  totalIncome: number;
+  totalExpense: number;
+  balance: number;
+  transactionCount: number;
+  periodStart: string;
+  periodEnd: string;
+  incomeByCategory: any[];
+  expensesByCategory: any[];
+}
+
+export interface PaginationMetadata {
+  page: number;
+  limit: number;
+  totalItems: number;
+  totalPages: number;
 }
 
 export interface TransactionsState {
   transactions: Transaction[]
+  transactionSummary: string
   analytics: AnalyticsResponse | null
-  transactionSummary: string | null
+  paginationMetadata: PaginationMetadata | null;
   loading: boolean
-  error: string | null
+  error: null
 }
