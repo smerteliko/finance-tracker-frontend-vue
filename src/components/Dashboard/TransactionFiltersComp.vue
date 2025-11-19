@@ -1,221 +1,128 @@
 <template>
-  <div class="filters">
-    <div class="filter-group">
-      <label class="filter-label">{{ t('filters.dateRange') }}:</label>
-      <select v-model="dateRange" @change="onDateRangeChange" class="filter-select">
-        <option value="month">{{ t('filters.thisMonth') }}</option>
-        <option value="last-month">{{ t('filters.lastMonth') }}</option>
-        <option value="quarter">{{ t('filters.thisQuarter') }}</option>
-        <option value="year">{{ t('filters.thisYear') }}</option>
-        <option value="custom">{{ t('filters.custom') }}</option>
-      </select>
-    </div>
+  <div class="card p-3 mb-4 shadow-sm">
+    <h6 class="card-title">{{ t('filters.title') }}</h6>
+    <form @submit.prevent="applyFilters">
+      <div class="row g-3">
 
-    <div v-if="dateRange === 'custom'" class="filter-group">
-      <label class="filter-label">{{ t('filters.from') }}:</label>
-      <input type="date" v-model="customStartDate" class="filter-input" />
-      <label class="filter-label">{{ t('filters.to') }}:</label>
-      <input type="date" v-model="customEndDate" class="filter-input" />
-    </div>
+        <div class="col-md-3">
+          <label for="accountId" class="form-label">{{ t('filters.account') }}</label>
+          <select class="form-select" id="accountId" v-model="form.accountId">
+            <option :value="undefined">{{ t('filters.allAccounts') }}</option>
+            <option v-for="acc in accountStore.accounts" :key="acc.id" :value="acc.id">
+              {{ acc.name }}
+            </option>
+          </select>
+        </div>
 
-    <div class="filter-group">
-      <label class="filter-label">{{ t('filters.type') }}:</label>
-      <select v-model="selectedType" @change="onFilterChange" class="filter-select">
-        <option value="">{{ t('filters.allTypes') }}</option>
-        <option value="INCOME">{{ t('filters.income') }}</option>
-        <option value="EXPENSE">{{ t('filters.expense') }}</option>
-      </select>
-    </div>
+        <div class="col-md-3">
+          <label for="categoryId" class="form-label">{{ t('filters.category') }}</label>
+          <select class="form-select" id="categoryId" v-model="form.categoryId">
+            <option :value="undefined">{{ t('filters.allCategories') }}</option>
+            <option v-for="cat in categoryStore.categories" :key="cat.id" :value="cat.id">
+              {{ cat.name }}
+            </option>
+          </select>
+        </div>
 
-    <div class="filter-group">
-      <label class="filter-label">{{ t('filters.category') }}:</label>
-      <select v-model="selectedCategory" @change="onFilterChange" class="filter-select">
-        <option value="">{{ t('filters.allCategories') }}</option>
-        <option v-for="category in categories" :key="category.id" :value="category.id">
-          {{ category.name }}
-        </option>
-      </select>
-    </div>
+        <div class="col-md-2">
+          <label for="type" class="form-label">{{ t('filters.type') }}</label>
+          <select class="form-select" id="type" v-model="form.type">
+            <option :value="undefined">{{ t('filters.allTypes') }}</option>
+            <option :value="TransactionTypeEnum.INCOME">{{ t('transactionForm.income') }}</option>
+            <option :value="TransactionTypeEnum.EXPENSE">{{ t('transactionForm.expense') }}</option>
+          </select>
+        </div>
 
-    <button @click="resetFilters" class="reset-btn">{{ t('filters.reset') }}</button>
+        <div class="col-md-2">
+          <label for="startDate" class="form-label">{{ t('filters.startDate') }}</label>
+          <input type="date" class="form-control" id="startDate" v-model="form.startDate" />
+        </div>
+
+        <div class="col-md-2">
+          <label for="endDate" class="form-label">{{ t('filters.endDate') }}</label>
+          <input type="date" class="form-control" id="endDate" v-model="form.endDate" />
+        </div>
+
+      </div>
+      <div class="row mt-3">
+        <div class="col-12 d-flex justify-content-end">
+          <button type="button" class="btn btn-info me-2" @click="downloadReport" :disabled="transactionsStore.loading">
+            <i class="bi bi-download me-2"></i> {{ t('general.downloadCSV') }}
+          </button>
+          <button type="button" class="btn btn-outline-secondary me-2" @click="resetFilters">
+            {{ t('general.reset') }}
+          </button>
+          <button type="submit" class="btn btn-primary" :disabled="transactionsStore.loading">
+            {{ t('general.apply') }}
+          </button>
+        </div>
+      </div>
+    </form>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, watch, onMounted } from 'vue'
-import { useI18n } from 'vue-i18n'
-import type { Category, TransactionFilter } from '@/types'
-import { categoryService } from '@/services/CategoryService'
+import { ref, reactive, onMounted } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { useTransactionsStore } from '@/stores/transactionsStore';
+import { useCategoryStore } from '@/stores/categoryStore';
+import { useAccountStore } from '@/stores/accountStore';
+import { useFilterStore } from '@/stores/filterStore';
+import { TransactionTypeEnum, type TransactionFilters } from '@/types';
 
-interface Emits {
-  (e: 'filterChange', filter: TransactionFilter): void
-}
+const { t } = useI18n();
+const transactionsStore = useTransactionsStore();
+const categoryStore = useCategoryStore();
+const accountStore = useAccountStore();
+const filterStore = useFilterStore();
 
-const { t } = useI18n()
-const emit = defineEmits<Emits>()
+const form = reactive<Partial<TransactionFilters>>({
+  accountId: filterStore.currentFilters.accountId,
+  categoryId: filterStore.currentFilters.categoryId,
+  type: filterStore.currentFilters.type,
+  startDate: filterStore.currentFilters.startDate ? filterStore.currentFilters.startDate.substring(0, 10) : undefined,
+  endDate: filterStore.currentFilters.endDate ? filterStore.currentFilters.endDate.substring(0, 10) : undefined,
+});
 
-const dateRange = ref('month')
-const selectedType = ref('')
-const selectedCategory = ref('')
-const customStartDate = ref('')
-const customEndDate = ref('')
-const categories = ref<Category[]>([])
+const applyFilters = () => {
+  filterStore.setFilters({
+    accountId: form.accountId,
+    categoryId: form.categoryId,
+    type: form.type,
+    startDate: form.startDate ? new Date(form.startDate).toISOString() : undefined,
+    endDate: form.endDate ? new Date(form.endDate).toISOString() : undefined,
+  });
 
-const getDateRange = () => {
-  const now = new Date()
-  let startDate: Date
-  let endDate: Date
-
-  switch (dateRange.value) {
-    case 'month':
-      startDate = new Date(now.getFullYear(), now.getMonth(), 1)
-      endDate = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59)
-      break
-    case 'last-month':
-      startDate = new Date(now.getFullYear(), now.getMonth() - 1, 1)
-      endDate = new Date(now.getFullYear(), now.getMonth(), 0, 23, 59, 59)
-      break
-    case 'quarter':
-      const quarter = Math.floor(now.getMonth() / 3)
-      startDate = new Date(now.getFullYear(), quarter * 3, 1)
-      endDate = new Date(now.getFullYear(), (quarter + 1) * 3, 0, 23, 59, 59)
-      break
-    case 'year':
-      startDate = new Date(now.getFullYear(), 0, 1)
-      endDate = new Date(now.getFullYear(), 11, 31, 23, 59, 59)
-      break
-    case 'custom':
-      if (customStartDate.value && customEndDate.value) {
-        startDate = new Date(customStartDate.value)
-        endDate = new Date(customEndDate.value)
-        endDate.setHours(23, 59, 59)
-      } else {
-        return { startDate: null, endDate: null }
-      }
-      break
-    default:
-      return { startDate: null, endDate: null }
-  }
-
-  return {
-    startDate: startDate.toISOString(),
-    endDate: endDate.toISOString(),
-  }
-}
-
-const onDateRangeChange = () => {
-  if (dateRange.value !== 'custom') {
-    onFilterChange()
-  }
-}
-
-const onFilterChange = () => {
-  const dateRangeValues = getDateRange()
-
-  const filter: TransactionFilter = {
-    startDate: dateRangeValues.startDate || undefined,
-    endDate: dateRangeValues.endDate || undefined,
-    type: (selectedType.value as 'INCOME' | 'EXPENSE') || undefined,
-    categoryId: selectedCategory.value ? parseInt(selectedCategory.value) : undefined,
-    page: 0,
-    size: 10,
-  }
-
-  emit('filterChange', filter)
-}
+  transactionsStore.fetchTransactions(filterStore.currentFilters, t);
+};
 
 const resetFilters = () => {
-  dateRange.value = 'month'
-  selectedType.value = ''
-  selectedCategory.value = ''
-  customStartDate.value = ''
-  customEndDate.value = ''
-  onFilterChange()
-}
+  filterStore.resetFilters();
 
-watch([customStartDate, customEndDate], () => {
-  if (dateRange.value === 'custom') {
-    onFilterChange()
-  }
-})
+  const defaults = filterStore.currentFilters;
+  form.accountId = defaults.accountId;
+  form.categoryId = defaults.categoryId;
+  form.type = defaults.type;
+  form.startDate = defaults.startDate;
+  form.endDate = defaults.endDate;
 
-onMounted(async () => {
-  try {
-    categories.value = await categoryService.getAllCategories()
-    onFilterChange()
-  } catch (error) {
-    console.error('Error loading categories:', error)
+  transactionsStore.fetchTransactions(filterStore.currentFilters, t);
+};
+
+const downloadReport = () => {
+  const filters = filterStore.currentFilters;
+
+  transactionsStore.downloadCsvReport(filters, t);
+};
+
+onMounted(() => {
+  if (categoryStore.categories.length === 0) {
+    categoryStore.fetchCategories(t);
   }
-})
+  if (accountStore.accounts.length === 0) {
+    accountStore.fetchAccounts(t);
+  }
+
+  transactionsStore.fetchTransactions(filterStore.currentFilters, t);
+});
 </script>
-
-<style scoped>
-.filters {
-  display: flex;
-  gap: 1.5rem;
-  align-items: end;
-  flex-wrap: wrap;
-  margin-bottom: 1.5rem;
-  padding: 1.5rem;
-  background: white;
-  border-radius: 0.5rem;
-  border: 1px solid #e5e7eb;
-}
-
-.filter-group {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  min-width: 150px;
-}
-
-.filter-label {
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: #374151;
-}
-
-.filter-select,
-.filter-input {
-  padding: 0.5rem 0.75rem;
-  border: 1px solid #d1d5db;
-  border-radius: 0.375rem;
-  font-size: 0.875rem;
-  background: white;
-  transition: border-color 0.2s;
-}
-
-.filter-select:focus,
-.filter-input:focus {
-  outline: none;
-  border-color: #3b82f6;
-  ring: 2px solid #3b82f6;
-}
-
-.reset-btn {
-  padding: 0.5rem 1rem;
-  background: #ef4444;
-  color: white;
-  border: none;
-  border-radius: 0.375rem;
-  cursor: pointer;
-  font-size: 0.875rem;
-  transition: background-color 0.2s;
-  align-self: end;
-}
-
-.reset-btn:hover {
-  background: #dc2626;
-}
-
-@media (max-width: 768px) {
-  .filters {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .filter-group {
-    min-width: auto;
-  }
-}
-</style>

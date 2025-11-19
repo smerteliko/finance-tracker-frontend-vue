@@ -46,6 +46,16 @@
             <span class="ms-2">{{ t('dashboardPage.addCategory') }}</span>
           </button>
         </li>
+        <li class="nav-item">
+          <button
+            class="nav-link text-white"
+            data-bs-toggle="modal"
+            data-bs-target="#accountModal"
+          >
+            <font-awesome-icon icon="bank" />
+            <span class="ms-2">{{ t('dashboardPage.addAccount') }}</span>
+          </button>
+        </li>
       </ul>
 
       <div class="mt-auto p-3 border-top">

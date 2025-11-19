@@ -1,45 +1,83 @@
 <template>
-  <div class="card p-4 h-100 shadow-sm d-flex flex-column justify-content-between">
-    <div>
-      <h5 class="card-title text-muted">{{ t('dashboardPage.balanceTitle') }}</h5>
-      <div class="text-center">
-        <h1 class="display-4 fw-bold text-primary">${{ transactionsStore.balance.toFixed(2) }}</h1>
-      </div>
-    </div>
-    <div v-if="transactionsStore.analytics" class="card-body">
-      <div class="row mt-4">
-        <div class="col-6 text-center text-success">
-          <small class="text-uppercase fw-bold">{{ t('dashboardPage.totalIncome') }}</small>
-          <h5 class="fw-bold mt-1">$ {{ transactionsStore.totalIncome.toFixed(2) }}</h5>
+  <div class="card shadow-sm h-100 mb-3" :class="cardClass">
+    <div class="card-body">
+      <div class="d-flex align-items-center">
+        <div class="flex-grow-1">
+          <h6 class="card-subtitle mb-2 text-white-50">{{ title }}</h6>
+          <h4 class="card-title text-white fw-bold">{{ formattedAmount }}</h4>
         </div>
-        <div class="col-6 text-center text-danger">
-          <small class="text-uppercase fw-bold">{{ t('dashboardPage.totalExpenses') }}</small>
-          <h5 class="fw-bold mt-1">$ {{ transactionsStore.totalExpense.toFixed(2) }}</h5>
-        </div>
-      </div>
-      <div class="row mt-4">
-        <div v-if="transactionsStore.transactionSummary" class="mt-3">
-          <div class="d-flex justify-content-between">
-            <small class="fw-bold" v-html="formattedSummary"></small>
-          </div>
-        </div>
+        <i class="bi fs-1" :class="iconClass"></i>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { useI18n } from 'vue-i18n'
-import { useTransactionsStore } from '@/stores/transactionsStore'
-import { computed } from 'vue'
+import { computed } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { useTransactionsStore } from '@/stores/transactionsStore';
 
-const { t } = useI18n()
-const transactionsStore = useTransactionsStore()
+const { t, locale } = useI18n();
 
-const formattedSummary = computed(() => {
-  if (transactionsStore.transactionSummary) {
-    return transactionsStore.transactionSummary.replace(/\n/g, '<br>')
+const props = defineProps({
+  type: {
+    type: String, // 'income', 'expense', or 'balance'
+    required: true,
+  },
+  amount: {
+    type: Number,
+    required: true,
+  },
+});
+
+const title = computed(() => {
+  return t(`balanceCard.${props.type}`);
+});
+
+const cardClass = computed(() => {
+  switch (props.type) {
+    case 'income':
+      return 'bg-success';
+    case 'expense':
+      return 'bg-danger';
+    case 'balance':
+      return 'bg-primary';
+    default:
+      return 'bg-secondary';
   }
-  return ''
-})
+});
+
+const iconClass = computed(() => {
+  switch (props.type) {
+    case 'income':
+      return 'bi-arrow-up-right-circle';
+    case 'expense':
+      return 'bi-arrow-down-left-circle';
+    case 'balance':
+      return 'bi-wallet2';
+    default:
+      return '';
+  }
+});
+
+const formattedAmount = computed(() => {
+  const currencyCode = 'USD';
+  return new Intl.NumberFormat(locale.value, {
+    style: 'currency',
+    currency: currencyCode,
+    minimumFractionDigits: 2,
+  }).format(props.amount);
+});
 </script>
+
+<style scoped>
+.bg-primary, .bg-success, .bg-danger {
+  background-color: var(--bs-primary);
+}
+.text-white-50 {
+  opacity: 0.7;
+}
+.bi {
+  opacity: 0.3; /* Subtle icon */
+}
+</style>
