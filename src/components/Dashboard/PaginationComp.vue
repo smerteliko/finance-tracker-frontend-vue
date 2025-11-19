@@ -1,78 +1,113 @@
 <template>
-  <div class="pagination">
-    <button
-      :disabled="currentPage === 0"
-      @click="changePage(currentPage - 1)"
-      class="pagination-btn"
-    >
-      ← Previous
-    </button>
+  <nav aria-label="Transaction pagination" v-if="totalPages > 1">
+    <ul class="pagination pagination-sm justify-content-center mb-0">
 
-    <span class="pagination-info"> Page {{ currentPage + 1 }} of {{ totalPages }} </span>
+      <li class="page-item" :class="{ disabled: currentPage === 1 }">
+        <a class="page-link" href="#" @click.prevent="changePage(currentPage - 1)">
+          {{ t('pagination.previous') }}
+        </a>
+      </li>
 
-    <button
-      :disabled="currentPage >= totalPages - 1"
-      @click="changePage(currentPage + 1)"
-      class="pagination-btn"
-    >
-      Next →
-    </button>
+      <li
+        class="page-item"
+        v-for="pageNumber in displayedPages"
+        :key="pageNumber"
+        :class="{ active: pageNumber === currentPage, disabled: pageNumber === '...' }"
+      >
+        <span v-if="pageNumber === '...'" class="page-link text-muted">...</span>
+        <a v-else class="page-link" href="#" @click.prevent="changePage(pageNumber)">
+          {{ pageNumber }}
+        </a>
+      </li>
+
+      <li class="page-item" :class="{ disabled: currentPage === totalPages }">
+        <a class="page-link" href="#" @click.prevent="changePage(currentPage + 1)">
+          {{ t('pagination.next') }}
+        </a>
+      </li>
+    </ul>
+  </nav>
+
+  <div class="d-flex align-items-center ms-3">
+    <span class="text-muted me-2">{{ t('pagination.perPage') }}:</span>
+    <select class="form-select form-select-sm" :value="itemsPerPage" @change="changeLimit($event)">
+      <option v-for="limit in availableLimits" :key="limit" :value="limit">{{ limit }}</option>
+    </select>
   </div>
 </template>
 
 <script setup lang="ts">
-interface Props {
-  currentPage: number
-  totalPages: number
-}
+import { computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 
-interface Emits {
-  (e: 'pageChange', page: number): void
-}
+const { t } = useI18n();
 
-const props = defineProps<Props>()
-const emit = defineEmits<Emits>()
+const props = defineProps({
+  currentPage: { type: Number, required: true },
+  totalPages: { type: Number, required: true },
+  totalItems: { type: Number, required: true },
+  itemsPerPage: { type: Number, required: true },
+});
 
-const changePage = (page: number) => {
-  emit('pageChange', page)
-}
+const emit = defineEmits(['pageChanged', 'limitChanged']);
+
+const availableLimits = [10, 20, 50];
+
+const displayedPages = computed(() => {
+  const pages = [];
+  const maxDisplayed = 5;
+  const start = Math.max(1, props.currentPage - Math.floor(maxDisplayed / 2));
+  const end = Math.min(props.totalPages, start + maxDisplayed - 1);
+
+  if (start > 1) {
+    pages.push(1);
+    if (start > 2) {
+      pages.push('...');
+    }
+  }
+
+  for (let i = start; i <= end; i++) {
+    pages.push(i);
+  }
+
+  if (end < props.totalPages) {
+    if (end < props.totalPages - 1) {
+      pages.push('...');
+    }
+    // Only push the last page if it's not already displayed
+    if (pages[pages.length - 1] !== props.totalPages) {
+      pages.push(props.totalPages);
+    }
+  }
+
+  return pages.filter((p, index, self) => {
+    return p !== '...' || (index > 0 && self[index - 1] !== '...');
+  });
+});
+
+const changePage = (page: number | string) => {
+  if (typeof page === 'string') return;
+  if (page >= 1 && page <= props.totalPages && page !== props.currentPage) {
+    emit('pageChanged', page);
+  }
+};
+
+const changeLimit = (event: Event) => {
+  const target = event.target as HTMLSelectElement;
+  const newLimit = parseInt(target.value);
+  emit('limitChanged', newLimit);
+};
 </script>
 
 <style scoped>
-.pagination {
+nav {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 1rem;
-  margin: 1rem 0;
-  padding: 1rem;
-  border-top: 1px solid #e5e7eb;
 }
-
-.pagination-btn {
-  padding: 0.5rem 1rem;
-  border: 1px solid #d1d5db;
-  border-radius: 0.375rem;
-  background: white;
-  color: #374151;
-  cursor: pointer;
-  font-size: 0.875rem;
-  transition: all 0.2s;
+.form-select-sm {
+  width: 70px;
 }
-
-.pagination-btn:hover:not(:disabled) {
-  background: #f3f4f6;
-  border-color: #9ca3af;
-}
-
-.pagination-btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.pagination-info {
-  font-size: 0.875rem;
-  color: #6b7280;
-  font-weight: 500;
+.page-link {
+  min-width: 30px;
+  text-align: center;
 }
 </style>

@@ -22,17 +22,11 @@
         </div>
         <div class="modal-body">
           <div v-if="loading" class="text-center">
-            <div class="spinner-border text-primary" role="status">
-              <span class="visually-hidden">{{ t('general.loading') }}</span>
-            </div>
+            <div class="spinner-border text-primary" role="status"></div>
           </div>
-
-          <div v-else-if="error" class="alert alert-danger">
-            {{ error }}
-          </div>
+          <div v-else-if="error" class="alert alert-danger">{{ error }}</div>
 
           <div v-else-if="transaction" class="transaction-details">
-            <!-- Amount and Type -->
             <div class="text-center mb-4">
               <div class="amount-display" :class="transaction.type.toLowerCase()">
                 {{ formatAmount(transaction.amount, transaction.type) }}
@@ -42,7 +36,11 @@
               </span>
             </div>
 
-            <!-- Description -->
+            <div class="detail-item">
+              <label class="detail-label">{{ t('transactionDetails.account') }}:</label>
+              <p class="detail-value">{{ transaction.account?.name }} ({{ transaction.account?.currency }})</p>
+            </div>
+
             <div class="detail-item">
               <label class="detail-label">{{ t('transactionDetails.description') }}:</label>
               <p class="detail-value">
@@ -50,46 +48,47 @@
               </p>
             </div>
 
-            <!-- Category -->
             <div class="detail-item">
               <label class="detail-label">{{ t('transactionDetails.category') }}:</label>
               <div class="detail-value">
                 <span
                   class="category-badge"
                   :style="{
-                    backgroundColor: transaction.categoryColor,
-                    color: getContrastColor(transaction.categoryColor),
+                    backgroundColor: transaction.category?.color,
+                    color: getContrastColor(transaction.category?.color || '#ffffff'),
                   }"
                 >
-                  {{ transaction.categoryName }}
+                  {{ transaction.category?.name }}
                 </span>
               </div>
             </div>
 
-            <!-- Date -->
+            <div class="detail-item" v-if="transaction.notes">
+              <label class="detail-label">{{ t('transactionDetails.notes') }}:</label>
+              <p class="detail-value">{{ transaction.notes }}</p>
+            </div>
+
             <div class="detail-item">
               <label class="detail-label">{{ t('transactionDetails.date') }}:</label>
               <p class="detail-value">{{ formatDetailedDate(transaction.date) }}</p>
             </div>
 
-            <!-- Transaction ID -->
             <div class="detail-item">
               <label class="detail-label">{{ t('transactionDetails.transactionId') }}:</label>
               <p class="detail-value text-muted small">{{ transaction.id }}</p>
             </div>
 
-            <!-- Actions -->
             <div class="detail-actions mt-4 pt-3 border-top">
               <button
                 class="btn btn-outline-primary me-2"
                 @click="editTransaction"
                 :disabled="loading"
               >
-                <i class="fas fa-edit me-1"></i>
+                <i class="bi bi-pencil-square me-1"></i>
                 {{ t('general.edit') }}
               </button>
               <button class="btn btn-outline-danger" @click="deleteTransaction" :disabled="loading">
-                <i class="fas fa-trash me-1"></i>
+                <i class="bi bi-trash me-1"></i>
                 {{ t('general.delete') }}
               </button>
             </div>
@@ -101,13 +100,14 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, nextTick } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { Modal } from 'bootstrap'
 import type { Transaction } from '@/types'
-import { transactionService } from '@/services/TransactionService'
+import { useTransactionsStore } from '@/stores/transactionsStore' // Use Store for actions
 
 const { t } = useI18n()
+const transactionsStore = useTransactionsStore()
 
 const modalElement = ref<HTMLElement | null>(null)
 let bootstrapModal: Modal | null = null
@@ -116,7 +116,6 @@ const transaction = ref<Transaction | null>(null)
 const loading = ref(false)
 const error = ref('')
 
-// Computed properties
 const headerClass = computed(() => ({
   'bg-success text-white': transaction.value?.type === 'INCOME',
   'bg-danger text-white': transaction.value?.type === 'EXPENSE',
@@ -127,42 +126,29 @@ const typeBadgeClass = computed(() => ({
   'bg-danger': transaction.value?.type === 'EXPENSE',
 }))
 
-// Methods
+
 const show = (transactionData: Transaction) => {
   transaction.value = transactionData
   error.value = ''
-  if (bootstrapModal) {
-    bootstrapModal.show()
-  }
+
+  nextTick(() => {
+    if (bootstrapModal) {
+      bootstrapModal.show()
+    }
+  })
 }
 
-const loadTransactionDetails = async (transactionId: number) => {
-  loading.value = true
-  error.value = ''
-
-  try {
-    // In a real app, you might fetch fresh data from the API
-    // For now, we'll use the passed transaction data
-    const transactions = await transactionService.getAllTransactions()
-    const foundTransaction = transactions.find((t) => t.id === transactionId)
-
-    if (foundTransaction) {
-      transaction.value = foundTransaction
-    } else {
-      error.value = t('errors.transactionNotFound')
-    }
-  } catch (err) {
-    console.error('Error loading transaction details:', err)
-    error.value = t('errors.loadTransactionFailed')
-  } finally {
-    loading.value = false
+const hide = () => {
+  if (bootstrapModal) {
+    bootstrapModal.hide()
   }
 }
 
 const formatAmount = (amount: number, type: string) => {
-  const formatted = new Intl.NumberFormat('en-US', {
+  const currencyCode = transaction.value?.account?.currency || 'USD';
+  const formatted = new Intl.NumberFormat(undefined, {
     style: 'currency',
-    currency: 'USD',
+    currency: currencyCode,
   }).format(Math.abs(amount))
 
   return type === 'INCOME' ? `+${formatted}` : `-${formatted}`
@@ -179,8 +165,8 @@ const formatDetailedDate = (dateString: string) => {
   })
 }
 
-const getContrastColor = (hexColor: string) => {
-  // Simple contrast color calculation for badge text
+const getContrastColor = (hexColor: string | undefined) => {
+  if (!hexColor || hexColor.length !== 7) return '#FFFFFF';
   const r = parseInt(hexColor.slice(1, 3), 16)
   const g = parseInt(hexColor.slice(3, 5), 16)
   const b = parseInt(hexColor.slice(5, 7), 16)
@@ -189,12 +175,11 @@ const getContrastColor = (hexColor: string) => {
 }
 
 const editTransaction = () => {
-  if (bootstrapModal) {
-    bootstrapModal.hide()
+  hide()
+  // CRITICAL: Emit event to parent (DashboardView) to open the TransactionFormModal for editing.
+  if (transaction.value) {
+    emit('editRequested', transaction.value.id)
   }
-  // TODO: Implement edit functionality
-  // You might want to open the transaction form modal with the current transaction data
-  console.log('Edit transaction:', transaction.value)
 }
 
 const deleteTransaction = async () => {
@@ -203,15 +188,14 @@ const deleteTransaction = async () => {
   }
 
   loading.value = true
+  const txId = transaction.value.id; // Store ID before clearing
   try {
-    await transactionService.deleteTransaction(transaction.value.id)
+    await transactionsStore.deleteTransaction(txId, t)
 
-    if (bootstrapModal) {
-      bootstrapModal.hide()
-    }
+    hide()
 
-    // Emit event to refresh the transactions list
-    emit('transactionDeleted', transaction.value.id)
+    // Emit event to parent to refresh the list
+    emit('transactionDeleted', txId)
   } catch (err) {
     console.error('Error deleting transaction:', err)
     error.value = t('errors.deleteTransactionFailed')
@@ -221,17 +205,22 @@ const deleteTransaction = async () => {
 }
 
 const emit = defineEmits<{
-  transactionDeleted: [id: number]
+  (e: 'transactionDeleted', id: string): void; // ID is now string
+  (e: 'editRequested', id: string): void; // New event for edit
 }>()
 
-// Expose the show method to parent components
 defineExpose({
   show,
+  hide, // <- НОВЫЙ МЕТОД
 })
 
 onMounted(() => {
   if (modalElement.value) {
-    bootstrapModal = new Modal(modalElement.value)
+    // Явно указываем параметры, чтобы предотвратить ошибки "reading backdrop"
+    bootstrapModal = new Modal(modalElement.value, {
+      backdrop: true,
+      keyboard: true
+    })
   }
 })
 </script>

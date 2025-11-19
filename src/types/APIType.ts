@@ -1,9 +1,9 @@
+// src/types/APIType.ts
+
 export interface PagedResponse<T> {
-  content: T[]
-  currentPage: number
-  pageSize: number
-  totalElements: number
+  items: T[]
+  page: number
+  limit: number
+  totalItems: number
   totalPages: number
-  first: boolean
-  last: boolean
 }

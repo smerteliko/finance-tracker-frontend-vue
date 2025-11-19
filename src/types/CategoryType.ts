@@ -1,11 +1,19 @@
+// src/types/CategoryType.ts (Adding payload interface)
+import type { TransactionTypeEnum } from './FiltersType'
+
 export interface Category {
-  id: number
-  uuid: string
-  name: string
-  color: string
-  type: 'INCOME' | 'EXPENSE'
-  createdAt: string
-  updatedAt: string
+  id: string; // UUID
+  name: string;
+  color: string;
+  type: TransactionTypeEnum;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CategoryPayload {
+  name: string;
+  type: TransactionTypeEnum;
+  color: string;
 }
 
 export interface CategoryState {

@@ -1,45 +1,39 @@
-import api from './APIService.ts'
-import type { Transaction, TransactionFilter, PagedResponse } from '@/types'
+import api from './APIService'
+import type { Transaction, PagedResponse, TransactionFilters, TransactionPayload } from '@/types'
 
-export const transactionService = {
-  async getFilteredTransactions(filter: TransactionFilter): Promise<PagedResponse<Transaction>> {
-    const response = await api.post('/transactions/filter', filter)
-    return response.data
-  },
-
-  async exportToCsv(filter: TransactionFilter): Promise<Blob> {
-    const response = await api.post('/reports/csv', filter, {
-      responseType: 'blob',
+export const TransactionService = {
+  /** Fetches a paginated and filtered list of transactions (GET /transactions?params). */
+  async getFilteredTransactions(filters: TransactionFilters): Promise<PagedResponse<Transaction>> {
+    const response = await api.get<PagedResponse<Transaction>>('/transactions', {
+      params: filters,
     })
     return response.data
   },
 
-  async getAllTransactions(): Promise<Transaction[]> {
-    const response = await api.get('/transactions')
+  /** Creates a new transaction record (POST /transactions). */
+  async createTransaction(payload: TransactionPayload): Promise<Transaction> {
+    const response = await api.post<Transaction>('/transactions', payload)
     return response.data
   },
 
-  async createTransaction(
-    transaction: Omit<
-      Transaction,
-      'id' | 'uuid' | 'createdAt' | 'updatedAt' | 'userId' | 'categoryName' | 'categoryColor'
-    >,
-  ): Promise<Transaction> {
-    const response = await api.post('/transactions', transaction)
+  /** Updates an existing transaction record (PUT /transactions/{id}). */
+  async updateTransaction(id: string, payload: TransactionPayload): Promise<Transaction> {
+    const response = await api.put<Transaction>(`/transactions/${id}`, payload)
     return response.data
   },
 
-  async updateTransaction(id: number, transaction: any): Promise<Transaction> {
-    const response = await api.put(`/transactions/${id}`, transaction)
-    return response.data
-  },
-
-  async deleteTransaction(id: number): Promise<void> {
+  /** Deletes a transaction record (DELETE /transactions/{id}). */
+  async deleteTransaction(id: string): Promise<void> {
     await api.delete(`/transactions/${id}`)
   },
-
-  async getTransactionsByPeriod(startDate: string, endDate: string): Promise<Transaction[]> {
-    const response = await api.get(`/transactions/period?startDate=${startDate}&endDate=${endDate}`)
+  async exportToCsv(filters: {
+    accountId: string | undefined;
+    endDate: string | undefined;
+    startDate: string | undefined
+  }): Promise<Blob> {
+    const response = await api.post('/reports/csv', filters, {
+      responseType: 'blob',
+    })
     return response.data
   },
 }

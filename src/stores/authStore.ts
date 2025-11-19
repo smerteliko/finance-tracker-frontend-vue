@@ -4,7 +4,7 @@ import axios from 'axios'
 import router from '../router'
 
 interface User {
-  userId: number
+  userId: string
   firstName: string
   lastName: string
 }
@@ -14,6 +14,7 @@ interface AuthState {
   isAuthenticated: boolean
   user: User | null
 }
+
 
 export const useAuthStore = defineStore('auth', {
   state: (): AuthState => ({
@@ -25,19 +26,23 @@ export const useAuthStore = defineStore('auth', {
   actions: {
     async login(credentials: any) {
       try {
-        const response = await axios.post(`${import.meta.env.VITE_API_URL}/auth/login`, credentials)
-        const { token, userId, firstName, lastName } = response.data // Assume backend returns token and user object
+        const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/login`, credentials)
+
+        const { token, user } = response.data
+
         this.token = token
         this.user = {
-          userId: userId,
-          firstName: firstName,
-          lastName: lastName,
+          userId: user.id,
+          firstName: user.firstName,
+          lastName: user.lastName,
         }
+
         this.isAuthenticated = true
         localStorage.setItem('token', this.token!)
         localStorage.setItem('user', JSON.stringify(this.user))
         router.push({ name: 'dashboard' })
       } catch (error: any) {
+        console.error(error)
         if (error.response && error.response.status === 401) {
           throw new Error('Invalid credentials')
         } else {
@@ -48,10 +53,15 @@ export const useAuthStore = defineStore('auth', {
 
     async register(userData: any) {
       try {
-        const response = await axios.post(`${import.meta.env.VITE_API_URL}/auth/register`, userData)
+        const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/register`, userData)
         const { token, user } = response.data
+
         this.token = token
-        this.user = user
+        this.user = {
+          userId: user.id,
+          firstName: user.firstName,
+          lastName: user.lastName
+        }
         this.isAuthenticated = true
         localStorage.setItem('token', this.token!)
         localStorage.setItem('user', JSON.stringify(this.user))
@@ -77,10 +87,16 @@ export const useAuthStore = defineStore('auth', {
 
     initializeFromLocalStorage() {
       const token = localStorage.getItem('token')
-      const user = localStorage.getItem('user')
-      if (token && user) {
+      const userString = localStorage.getItem('user')
+      if (token && userString) {
         this.token = token
-        this.user = JSON.parse(user)
+        try {
+          this.user = JSON.parse(userString);
+        } catch (e) {
+          console.error("Failed to parse user data from localStorage", e);
+          this.logout();
+          return;
+        }
         this.isAuthenticated = true
       }
     },
