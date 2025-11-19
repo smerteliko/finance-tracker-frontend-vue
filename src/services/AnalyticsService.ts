@@ -1,28 +1,29 @@
-import api from './APIService.ts'
+import api from './APIService'
+import type { AnalyticsResponse } from '@/types'
 
-export const analyticsService = {
-  async getCurrentBalance(): Promise<number> {
-    const response = await api.get('/analytics/current-balance')
+export const AnalyticsService = {
+  /**
+   * Fetches comprehensive financial analytics for a period (POST /analytics/).
+   * @param startDate ISO 8601 string
+   * @param endDate ISO 8601 string
+   */
+  async fetchAnalytics(startDate: string, endDate: string): Promise<AnalyticsResponse> {
+    const response = await api.post<AnalyticsResponse>(
+      '/analytics/',
+      { startDate:startDate, endDate:endDate } // Payload matches Symfony AnalyticsRequest DTO
+    )
     return response.data
   },
 
-  async getBalanceForPeriod(startDate: string, endDate: string): Promise<number> {
-    const response = await api.post('/analytics/period-balance', { startDate, endDate })
-    return response.data
-  },
-
-  async getAnalytics(startDate: string, endDate: string): Promise<any> {
-    const response = await api.post('/analytics', { startDate, endDate })
-    return response.data
-  },
-
-  async getMonthlySummary(year: number, month: number): Promise<any> {
-    const response = await api.get(`/analytics/monthly/${year}/${month}`)
-    return response.data
-  },
-
-  async getSummary(startDate: string, endDate: string): Promise<string> {
-    const response = await api.post('/reports/summary', { startDate, endDate })
-    return response.data
+  /**
+   * Fetches a financial summary text (POST /reports/summary).
+   */
+  async fetchSummary(startDate: string, endDate: string): Promise<string> {
+    const response = await api.post<{ summary: string }>('/reports/summary', {
+      startDate,
+      endDate,
+    })
+    // Backend returns JSON object { summary: "..." }, extract the string
+    return response.data.summary
   },
 }
