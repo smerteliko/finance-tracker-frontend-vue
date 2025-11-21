@@ -18,6 +18,17 @@ The project showcases best practices in frontend development, including:
 * **Multi-language Support:** Easily switch between English, Russian, and French.
 * **Responsive UI:** A mobile-first design that adapts gracefully to various screen sizes, featuring a collapsed sidebar on mobile devices.
 
+
+## 🔗 Project Ecosystem Links
+
+This repository is part of a larger full-stack project, designed for technology comparison and demonstration:
+
+| Project                       | Role | Repository Link                                                 |
+|:------------------------------| :--- |:----------------------------------------------------------------|
+| **Sibling Backend** (Spring)  | Alternative Backend Implementation | `https://github.com/smerteliko/finance-tracker-backend-spring`  |
+| **Sibling Backend** (Symfony) | Alternative Backend Implementation | `https://github.com/smerteliko/finance-tracker-backend-symfony` |
+
+
 ## 🚀 Key Features
 
 * **Secure Authentication:** User registration and login with JWT authentication.
